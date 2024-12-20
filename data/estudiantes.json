@@ -1,0 +1,12 @@
+[
+    {
+        "carnet": "202010398",
+        "nombre": "Pablo Amaya",
+        "apellido": "Vasquez",
+        "edad": "22",
+        "estado": "activo",
+        "cursos": [
+            "456"
+        ]
+    }
+]
