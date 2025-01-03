@@ -5,19 +5,16 @@ ESTUDIANTES_FILE = "data/estudiantes.json"
 
 def cargar_estudiantes():
     if not os.path.exists(ESTUDIANTES_FILE):
-        # Si el archivo no existe, crearlo con una lista vacía
         with open(ESTUDIANTES_FILE, "w") as file:
             json.dump([], file)
         return []
 
-    # Manejar archivo vacío o con formato incorrecto
     try:
         with open(ESTUDIANTES_FILE, "r") as file:
             return json.load(file)
     except json.JSONDecodeError:
-        print(f"Advertencia: El archivo '{ESTUDIANTES_FILE}' está vacío o corrupto. Se inicializará nuevamente.")
+        print(f"Advertencia: El archivo '{ESTUDIANTES_FILE}' está vacío o corrupto.")
         return []
-
 
 def guardar_estudiantes(data):
     with open(ESTUDIANTES_FILE, "w") as file:
@@ -48,10 +45,9 @@ def crear_estudiante():
     edad = input("Ingrese la edad del estudiante: ")
 
     estudiantes = cargar_estudiantes()
-    for e in estudiantes:
-        if e['carnet'] == carnet:
-            print("Error: El carnet ya existe.")
-            return
+    if any(e["carnet"] == carnet for e in estudiantes):
+        print("Error: El carnet ya existe.")
+        return
 
     estudiantes.append({"carnet": carnet, "nombre": nombre, "apellido": apellido, "edad": edad, "estado": "activo", "cursos": []})
     guardar_estudiantes(estudiantes)
@@ -62,6 +58,7 @@ def mostrar_estudiantes():
     if not estudiantes:
         print("No hay estudiantes registrados.")
         return
+
     print("\n--- LISTA DE ESTUDIANTES ---")
     for e in estudiantes:
         print(f"Carnet: {e['carnet']}, Nombre: {e['nombre']} {e['apellido']}, Edad: {e['edad']}, Estado: {e['estado']}")

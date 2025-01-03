@@ -1,23 +1,21 @@
 import json
 import os
+import facultades  # Para validar facultades
 
 CARRERAS_FILE = "data/carreras.json"
 
 def cargar_carreras():
     if not os.path.exists(CARRERAS_FILE):
-        # Si el archivo no existe, crearlo con una lista vacía
         with open(CARRERAS_FILE, "w") as file:
             json.dump([], file)
         return []
 
-    # Manejar archivo vacío o con formato incorrecto
     try:
         with open(CARRERAS_FILE, "r") as file:
             return json.load(file)
     except json.JSONDecodeError:
         print(f"Advertencia: El archivo '{CARRERAS_FILE}' está vacío o corrupto. Se inicializará nuevamente.")
         return []
-
 
 def guardar_carreras(data):
     with open(CARRERAS_FILE, "w") as file:
@@ -42,19 +40,26 @@ def menu_carreras():
             print("Opción inválida. Intente nuevamente.")
 
 def crear_carrera():
-    facultad = input("Ingrese el código de la facultad: ")
+    facultad_codigo = input("Ingrese el código de la facultad: ")
+    facultades_list = facultades.cargar_facultades()
+
+    # Validar que la facultad exista
+    facultad = next((f for f in facultades_list if f["codigo"] == facultad_codigo), None)
+    if not facultad:
+        print("Error: La facultad no existe. No se puede crear la carrera.")
+        return
+
     codigo = input("Ingrese el código de la carrera: ")
     nombre = input("Ingrese el nombre de la carrera: ")
 
     carreras = cargar_carreras()
-    for c in carreras:
-        if c['codigo'] == codigo:
-            print("Error: El código de la carrera ya existe.")
-            return
+    if any(c["codigo"] == codigo for c in carreras):
+        print("Error: El código de la carrera ya existe.")
+        return
 
-    carreras.append({"codigo": codigo, "nombre": nombre, "facultad": facultad})
+    carreras.append({"codigo": codigo, "nombre": nombre, "facultad": facultad_codigo})
     guardar_carreras(carreras)
-    print("Carrera creada exitosamente.")
+    print(f"Carrera '{nombre}' creada exitosamente en la facultad '{facultad['nombre']}'.")
 
 def mostrar_carreras():
     carreras = cargar_carreras()

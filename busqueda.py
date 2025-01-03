@@ -1,16 +1,7 @@
-import json
-import os
-
-ESTUDIANTES_FILE = "data/estudiantes.json"
-CURSOS_FILE = "data/cursos.json"
-CARRERAS_FILE = "data/carreras.json"
-FACULTADES_FILE = "data/facultades.json"
-
-def cargar_datos(file_path):
-    if not os.path.exists(file_path):
-        return []
-    with open(file_path, "r") as file:
-        return json.load(file)
+import estudiantes
+import cursos
+import carreras
+import facultades
 
 def menu_busqueda():
     while True:
@@ -38,9 +29,9 @@ def menu_busqueda():
 
 def buscar_estudiante_por_carnet():
     carnet = input("Ingrese el carnet del estudiante: ")
-    estudiantes = cargar_datos(ESTUDIANTES_FILE)
+    estudiantes_list = estudiantes.cargar_estudiantes()
 
-    estudiante = next((e for e in estudiantes if e["carnet"] == carnet), None)
+    estudiante = next((e for e in estudiantes_list if e["carnet"] == carnet), None)
     if estudiante:
         print("\n--- INFORMACIÓN DEL ESTUDIANTE ---")
         print(f"Nombre: {estudiante['nombre']} {estudiante['apellido']}")
@@ -51,9 +42,9 @@ def buscar_estudiante_por_carnet():
 
 def buscar_curso():
     codigo = input("Ingrese el código del curso: ")
-    cursos = cargar_datos(CURSOS_FILE)
+    cursos_list = cursos.cargar_cursos()
 
-    curso = next((c for c in cursos if c["codigo"] == codigo), None)
+    curso = next((c for c in cursos_list if c["codigo"] == codigo), None)
     if curso:
         print("\n--- INFORMACIÓN DEL CURSO ---")
         print(f"Código: {curso['codigo']}, Nombre: {curso['nombre']}")
@@ -63,9 +54,9 @@ def buscar_curso():
 
 def buscar_carrera():
     codigo = input("Ingrese el código de la carrera: ")
-    carreras = cargar_datos(CARRERAS_FILE)
+    carreras_list = carreras.cargar_carreras()
 
-    carrera = next((c for c in carreras if c["codigo"] == codigo), None)
+    carrera = next((c for c in carreras_list if c["codigo"] == codigo), None)
     if carrera:
         print("\n--- INFORMACIÓN DE LA CARRERA ---")
         print(f"Código: {carrera['codigo']}, Nombre: {carrera['nombre']}")
@@ -75,9 +66,9 @@ def buscar_carrera():
 
 def buscar_facultad():
     codigo = input("Ingrese el código de la facultad: ")
-    facultades = cargar_datos(FACULTADES_FILE)
+    facultades_list = facultades.cargar_facultades()
 
-    facultad = next((f for f in facultades if f["codigo"] == codigo), None)
+    facultad = next((f for f in facultades_list if f["codigo"] == codigo), None)
     if facultad:
         print("\n--- INFORMACIÓN DE LA FACULTAD ---")
         print(f"Código: {facultad['codigo']}, Nombre: {facultad['nombre']}")
